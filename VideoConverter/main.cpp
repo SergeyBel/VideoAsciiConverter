@@ -57,23 +57,7 @@ int main(int, char**)
         edges = converter.ConvertImageToAsciiImage(frame);
         imshow("edges", edges);
         outputVideo << edges;
-       // if (waitKey(30) >= 0) break;
         if (inputVideo.get(CV_CAP_PROP_POS_MSEC) >= 1000 * 2000 + 10 * 1000) return 0;
     }
-
-
-    ///Test case
-    /*
-    ConverterAscii converter;
-    Mat image;
-    ofstream out("log.txt");
-    image = imread("image.jpg", CV_LOAD_IMAGE_COLOR);
-
-    imshow("1", image);
-    waitKey(20);
-    cout << converter.ConvertImageToAsciiString(image) << endl;
-    converter.ConvertImageToAsciiImage(image);
-    out.close();
-    */
     return 0;
 }
