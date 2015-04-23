@@ -24,8 +24,6 @@ string ConverterAscii::ConvertImageToString(Mat image)
 {
 	int verticalStep = drawer.maxSymbolHeight;
 	int horizontalStep = drawer.maxSymbolWidth;
-	/*int verticalStep = 4;
-	int horizontalStep = 4;*/
 	string symbol;
 	string resultString = "";
 
@@ -102,4 +100,9 @@ char ConverterAscii::ConvertMatrixToChar(Mat matrix)
 
 	int index = bright / ascii.length();
 	return ascii[index];
+}
+
+SymbolsDrawer ConverterAscii::GetDrawer()
+{
+	return drawer;
 }

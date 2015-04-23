@@ -25,6 +25,7 @@ public:
 	ConverterAscii();
 	Mat ConvertImageToAsciiImage(Mat image);
 	string ConvertImageToAsciiString(Mat image);
+	SymbolsDrawer GetDrawer();
 
 
 };

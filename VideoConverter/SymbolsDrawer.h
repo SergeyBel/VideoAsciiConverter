@@ -19,6 +19,7 @@ class SymbolsDrawer
 	void SetMaxSymbolWidth();
 	void SetMaxSymbolHeight();
 	vector<Mat> SymbolsImages();
+	Mat GetSymbolImage(string str, Scalar color);
 public:
 	int maxSymbolWidth;
 	int maxSymbolHeight;
