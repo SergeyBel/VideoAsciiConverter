@@ -20,6 +20,34 @@ Mat ConverterAscii::ResizeImage(Mat image)
 
 
 
+Scalar CharColor(Mat matrix)
+{
+	int red = 0;
+	int green = 0;
+	int blue = 0;
+	for (int i = 0; i < matrix.rows; i++)
+	{
+		for (int j = 0; j < matrix.cols; j++)
+		{
+			Vec3b pixel = GetBGRPixel(matrix, i, j);
+			blue += pixel[0];
+			green += pixel[1];
+			red += pixel[2];
+			
+		}
+	}
+
+	red /= matrix.rows * matrix.cols;
+	green /= matrix.rows * matrix.cols;
+	blue /= matrix.rows * matrix.cols;
+
+
+
+	return Scalar(blue, green, red);
+
+
+}
+
 string ConverterAscii::ConvertImageToString(Mat image)
 {
 	int verticalStep = drawer.maxSymbolHeight;
@@ -35,6 +63,8 @@ string ConverterAscii::ConvertImageToString(Mat image)
 			Mat tmp = image(Rect(j, i, horizontalStep, verticalStep));
 			Mat subm(tmp);
 			symbol = ConvertMatrixToChar(subm);
+			Scalar color = CharColor(subm);
+			colors.push_back(color);
 			line += symbol;
 		}
 		line += "\n";
@@ -51,6 +81,7 @@ Mat ConverterAscii::AsciiStringToAsciiImage(string  str, int height, int width)
 	int index = 0;
 	int currentX = 0;
 	int currentY = 0;
+	int colorIndex = 0;
 	Point org;
 	Scalar color = Scalar::all(255);
 	Mat res(height, width, 16);
@@ -58,10 +89,11 @@ Mat ConverterAscii::AsciiStringToAsciiImage(string  str, int height, int width)
 	{
 		string line = str.substr(start, index - start);
 		start = index + 1;
-		//org = Point(0, currentY + maxSymbolHeight);
-		//putText(res, line, org, fontFace, fontScale, color);
-		drawer.DrawAsciiLine(res, currentY, line);
+		//Scalar color = Scalar::all(255);
+		
+		drawer.DrawAsciiLine(res, currentY, line, vector<Scalar>(colors.begin() + colorIndex, colors.begin() + colorIndex + line.length()));
 		currentY += drawer.maxSymbolHeight;
+		colorIndex+=line.length();
 	}
 	//namedWindow("ascii", CV_WINDOW_AUTOSIZE);
 	//imshow("ascii", res);
@@ -71,6 +103,7 @@ Mat ConverterAscii::AsciiStringToAsciiImage(string  str, int height, int width)
 
 Mat ConverterAscii::ConvertImageToAsciiImage(Mat image)
 {
+	colors.clear();
 	image = ResizeImage(image);
 	return AsciiStringToAsciiImage(ConvertImageToString(image), image.rows, image.cols);  // *3 - for testing
 
@@ -78,6 +111,7 @@ Mat ConverterAscii::ConvertImageToAsciiImage(Mat image)
 
 string ConverterAscii::ConvertImageToAsciiString(Mat image)
 {
+	colors.clear();
 	image = ResizeImage(image);
 	return ConvertImageToString(image);
 

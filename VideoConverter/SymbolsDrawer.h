@@ -24,5 +24,5 @@ public:
 	int maxSymbolWidth;
 	int maxSymbolHeight;
 	SymbolsDrawer(string ascii = "");
-	void DrawAsciiLine(Mat image, int i, string line);
+	void DrawAsciiLine(Mat image, int i, string line, vector<Scalar> lineColors);
 };

@@ -13,6 +13,7 @@ class ConverterAscii
 	string ascii;
 	int type;
 	SymbolsDrawer drawer;
+	vector<Scalar> colors;
 
 	char ConvertMatrixToChar(Mat matrix);
 

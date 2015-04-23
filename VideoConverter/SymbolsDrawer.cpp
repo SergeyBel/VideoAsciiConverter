@@ -59,14 +59,13 @@ vector<Mat>  SymbolsDrawer::SymbolsImages()
 	return result;
 }
 
-void SymbolsDrawer::DrawAsciiLine(Mat image, int i, string line)
+void SymbolsDrawer::DrawAsciiLine(Mat image, int i, string line, vector<Scalar> lineColors)
 {
 	int j = 0;
 	for (int k = 0; k < line.length(); k++)
 	{
 		Mat tmp = image(Rect(j, i, maxSymbolWidth, maxSymbolHeight));
-		int index = ascii.find(line[k]);
-		symbolsImages[index].copyTo(tmp);
+		GetSymbolImage(line.substr(k, 1), lineColors[k]).copyTo(tmp);
 		j += maxSymbolWidth;
 	}
 }

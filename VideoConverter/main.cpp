@@ -9,7 +9,7 @@ using namespace std;
 int main(int, char**)
 {
     ConverterAscii converter;
-    VideoCapture inputVideo("Point Break.avi"); // open the default camera
+    VideoCapture inputVideo("video.avi"); // open the default camera
     if (!inputVideo.isOpened())// check if we succeeded
     {
         cout << "Error: Can not open input video" << endl;
@@ -45,7 +45,7 @@ int main(int, char**)
 
     Mat edges;
     namedWindow("edges", CV_WINDOW_AUTOSIZE);
-    inputVideo.set(CV_CAP_PROP_POS_MSEC, 1000 * 1000);
+    inputVideo.set(CV_CAP_PROP_POS_MSEC, 1000 * 2000);
 
     for (;;)
     {
@@ -54,12 +54,11 @@ int main(int, char**)
         if (frame.empty()) break;  // end of file
         imshow("frame", frame);
         if (waitKey(30) >= 0) break;
-        cvtColor(frame, edges, 0);
-        edges = converter.ConvertImageToAsciiImage(edges);;
+        edges = converter.ConvertImageToAsciiImage(frame);
         imshow("edges", edges);
         outputVideo << edges;
        // if (waitKey(30) >= 0) break;
-        if (inputVideo.get(CV_CAP_PROP_POS_MSEC) >= 1000 * 1000 + 10 * 1000) return 0;
+        if (inputVideo.get(CV_CAP_PROP_POS_MSEC) >= 1000 * 2000 + 10 * 1000) return 0;
     }
 
 
