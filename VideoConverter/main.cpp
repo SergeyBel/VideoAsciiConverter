@@ -9,10 +9,12 @@ using namespace std;
 int main(int, char**)
 {
     VideoCapture cap("video.avi"); // open the default camera
-    if (!cap.isOpened())  // check if we succeeded
+    if (!cap.isOpened())// check if we succeeded
+    {
         cout << "Error: Can not open file" << endl;
         return -1;
-
+    }
+        
     Mat edges;
     namedWindow("edges", CV_WINDOW_AUTOSIZE);
     cap.set(CV_CAP_PROP_POS_MSEC, 1000 * 1000);
