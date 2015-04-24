@@ -9,12 +9,12 @@ using namespace cv;
 
 class SymbolsDrawer
 {
-	string ascii;
-	int fontFace;
-	double fontScale;
-	int thickness;
-	int type;
-	vector<Mat> symbolsImages;
+	string ascii;  // string of symbols to dra
+	int fontFace;  // font
+	double fontScale;  // scale of font
+	int thickness;   // thick of font line
+	int type;      // type of image
+	vector<Mat> symbolsImages;  // image of every symbol from ascii
 
 	void SetMaxSymbolWidth();
 	void SetMaxSymbolHeight();

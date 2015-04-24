@@ -12,13 +12,11 @@ ConverterAscii::ConverterAscii()
 
 Mat ConverterAscii::ResizeImage(Mat image)
 {
-	int newImageHeight = image.rows + (drawer.maxSymbolHeight - image.rows % drawer.maxSymbolHeight);
+	int newImageHeight = image.rows + (drawer.maxSymbolHeight - image.rows % drawer.maxSymbolHeight); // image size should be whole number of symbols
 	int newImageWidth = image.cols + (drawer.maxSymbolWidth - image.cols % drawer.maxSymbolWidth);
 	resize(image, image, Size(newImageWidth, newImageHeight));
 	return image;
 }
-
-
 
 Scalar CharColor(Mat matrix)
 {
@@ -54,6 +52,7 @@ string ConverterAscii::ConvertImageToString(Mat image)
 	int horizontalStep = drawer.maxSymbolWidth;
 	string symbol;
 	string resultString = "";
+	Scalar color;
 
 	for (int i = 0; i < image.rows; i += verticalStep)
 	{
@@ -63,9 +62,10 @@ string ConverterAscii::ConvertImageToString(Mat image)
 			Mat tmp = image(Rect(j, i, horizontalStep, verticalStep));
 			Mat subm(tmp);
 			symbol = ConvertMatrixToChar(subm);
-			Scalar color = CharColor(subm);
-			colors.push_back(color);
 			line += symbol;
+			color = CharColor(subm);
+			colors.push_back(color);
+			
 		}
 		line += "\n";
 		resultString += line;
@@ -73,31 +73,23 @@ string ConverterAscii::ConvertImageToString(Mat image)
 	return resultString;
 }
 
-
-
 Mat ConverterAscii::AsciiStringToAsciiImage(string  str, int height, int width)
 {
 	int start = 0;
 	int index = 0;
-	int currentX = 0;
 	int currentY = 0;
 	int colorIndex = 0;
 	Point org;
-	Scalar color = Scalar::all(255);
+	Scalar color;
 	Mat res(height, width, 16);
 	while ((index = str.find('\n', start)) != -1)
 	{
 		string line = str.substr(start, index - start);
 		start = index + 1;
-		//Scalar color = Scalar::all(255);
-		
 		drawer.DrawAsciiLine(res, currentY, line, vector<Scalar>(colors.begin() + colorIndex, colors.begin() + colorIndex + line.length()));
 		currentY += drawer.maxSymbolHeight;
 		colorIndex+=line.length();
 	}
-	//namedWindow("ascii", CV_WINDOW_AUTOSIZE);
-	//imshow("ascii", res);
-	//waitKey(0);
 	return res;
 }
 
@@ -106,7 +98,6 @@ Mat ConverterAscii::ConvertImageToAsciiImage(Mat image)
 	colors.clear();
 	image = ResizeImage(image);
 	return AsciiStringToAsciiImage(ConvertImageToString(image), image.rows, image.cols);  // *3 - for testing
-
 }
 
 string ConverterAscii::ConvertImageToAsciiString(Mat image)
@@ -114,7 +105,6 @@ string ConverterAscii::ConvertImageToAsciiString(Mat image)
 	colors.clear();
 	image = ResizeImage(image);
 	return ConvertImageToString(image);
-
 }
 
 char ConverterAscii::ConvertMatrixToChar(Mat matrix)
@@ -136,7 +126,12 @@ char ConverterAscii::ConvertMatrixToChar(Mat matrix)
 	return ascii[index];
 }
 
-SymbolsDrawer ConverterAscii::GetDrawer()
+int ConverterAscii::GetMaxSymbolHeight()
 {
-	return drawer;
+	return drawer.maxSymbolHeight;
+}
+
+int ConverterAscii::GetMaxSymbolWidth()
+{
+	return drawer.maxSymbolWidth;
 }

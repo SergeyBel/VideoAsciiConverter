@@ -3,15 +3,13 @@
 SymbolsDrawer::SymbolsDrawer(string ascii)
 {
 	fontFace = FONT_HERSHEY_SIMPLEX;
-	fontScale = 0.2;
+	fontScale = 0.1;
 	thickness = 1;
 	type = 16;
 	this->ascii = ascii;
 	SetMaxSymbolWidth();
 	SetMaxSymbolHeight();
-	symbolsImages = SymbolsImages();
 }
-
 
 void SymbolsDrawer::SetMaxSymbolWidth()
 {
@@ -46,18 +44,6 @@ Mat SymbolsDrawer::GetSymbolImage(string str, Scalar color)
 
 }
 
-vector<Mat>  SymbolsDrawer::SymbolsImages()
-{
-	vector<Mat> result;
-	int baseLine = 0;
-	Scalar color = Scalar::all(255);
-	for (int i = 0; i < ascii.length(); i++)
-	{
-
-		result.push_back(GetSymbolImage(ascii.substr(i, 1), color));
-	}
-	return result;
-}
 
 void SymbolsDrawer::DrawAsciiLine(Mat image, int i, string line, vector<Scalar> lineColors)
 {

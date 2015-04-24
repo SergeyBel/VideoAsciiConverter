@@ -25,8 +25,8 @@ int main(int, char**)
 
     int h = inputVideo.get(CV_CAP_PROP_FRAME_HEIGHT);
     int w = inputVideo.get(CV_CAP_PROP_FRAME_WIDTH);
-    h = h + (converter.GetDrawer().maxSymbolHeight - h % converter.GetDrawer().maxSymbolHeight);
-    w = w + (converter.GetDrawer().maxSymbolWidth - w % converter.GetDrawer().maxSymbolWidth);
+    h = h + (converter.GetMaxSymbolHeight() - h % converter.GetMaxSymbolHeight());  // image size should be whole number of symbols
+    w = w + (converter.GetMaxSymbolWidth() - w % converter.GetMaxSymbolWidth());
 
     VideoWriter outputVideo;    // Open the output
     outputVideo.open(name, ex = -1, inputVideo.get(CV_CAP_PROP_FPS), Size(w, h), true);
@@ -38,26 +38,30 @@ int main(int, char**)
     }
     
     cout << "Input frame resolution: Width=" << w << "  Height=" << h
-        << " of nr#: " << inputVideo.get(CV_CAP_PROP_FRAME_COUNT) << endl;
+        << "number of frames: " << inputVideo.get(CV_CAP_PROP_FRAME_COUNT) << endl;
     cout << "Input codec type: " << EXT << endl;
 
 
 
-    Mat edges;
-    namedWindow("edges", CV_WINDOW_AUTOSIZE);
-    inputVideo.set(CV_CAP_PROP_POS_MSEC, 1000 * 2000);
-
+    Mat asciiFrame;
+    long long frames = 1;
+    int oldPercent = 0;
+    cout << "Start rendering" << endl;
     for (;;)
     {
         Mat frame;
-        inputVideo >> frame; // get a new frame from camera
+        inputVideo >> frame; // get a new frame from video
         if (frame.empty()) break;  // end of file
-        imshow("frame", frame);
-        if (waitKey(30) >= 0) break;
-        edges = converter.ConvertImageToAsciiImage(frame);
-        imshow("edges", edges);
-        outputVideo << edges;
-        if (inputVideo.get(CV_CAP_PROP_POS_MSEC) >= 1000 * 2000 + 10 * 1000) return 0;
+        asciiFrame = converter.ConvertImageToAsciiImage(frame);
+        outputVideo << asciiFrame;
+        double percent = frames / (double)inputVideo.get(CV_CAP_PROP_FRAME_COUNT)  * 100;
+        if (percent - oldPercent > 1)
+        {
+            oldPercent = std::floor(percent);
+            cout << oldPercent << " % rendered..." << endl;
+        }
+        frames++;
     }
+    cout << "End rendering" << endl;
     return 0;
 }

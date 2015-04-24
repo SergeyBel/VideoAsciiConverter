@@ -10,13 +10,12 @@ using namespace cv;
 
 class ConverterAscii
 {	
-	string ascii;
-	int type;
-	SymbolsDrawer drawer;
-	vector<Scalar> colors;
+	string ascii;   //string of characters for replace
+	int type;    // type of image
+	SymbolsDrawer drawer;  // class for draw symbols
+	vector<Scalar> colors;  // color of every symbol
 
 	char ConvertMatrixToChar(Mat matrix);
-
 	Mat AsciiStringToAsciiImage(string  str, int height, int width);
 	string ConvertImageToString(Mat image);
 	void DrawAsciiLine(Mat image, int j, string line);
@@ -26,7 +25,6 @@ public:
 	ConverterAscii();
 	Mat ConvertImageToAsciiImage(Mat image);
 	string ConvertImageToAsciiString(Mat image);
-	SymbolsDrawer GetDrawer();
-
-
+	int GetMaxSymbolHeight();
+	int GetMaxSymbolWidth();
 };
