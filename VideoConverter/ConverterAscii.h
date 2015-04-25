@@ -10,7 +10,7 @@ using namespace cv;
 
 class ConverterAscii
 {	
-	string ascii;   //string of characters for replace
+	string ascii;
 	int type;    // type of image
 	SymbolsDrawer drawer;  // class for draw symbols
 	vector<Scalar> colors;  // color of every symbol
@@ -27,4 +27,5 @@ public:
 	string ConvertImageToAsciiString(Mat image);
 	int GetMaxSymbolHeight();
 	int GetMaxSymbolWidth();
+	void SetFontScale(double scale);
 };

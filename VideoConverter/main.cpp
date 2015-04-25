@@ -4,19 +4,56 @@
 using namespace cv;
 using namespace std;
 
-
-
-int main(int, char**)
+void PrintHelp()
 {
-    ConverterAscii converter;
-    VideoCapture inputVideo("video.avi"); // open the default camera
+}
+
+int main(int argc, char**argv)
+{
+   
+    if (argc < 2 || argc > 3)
+    {
+        PrintHelp();
+        return 0;
+    }
+    string input = argv[1];
+    VideoCapture inputVideo(input); // open the default camera
     if (!inputVideo.isOpened())// check if we succeeded
     {
         cout << "Error: Can not open input video" << endl;
         return -1;
     }
 
-    string name = "out.avi";
+    string extension = input.substr(input.find_first_of("."));
+
+    double scale;
+    if (argc == 3)
+    {
+        try
+        {
+            scale = strtod(argv[2], NULL);
+        }
+        catch (...)
+        {
+            cout << "Error: scale is not correct" << endl;
+            PrintHelp();
+            return 1;
+        }
+    }
+    else
+    {
+        scale = 0.2;
+    }
+   
+    cout << "Font scale = " << scale << endl;
+
+    ConverterAscii converter;
+    converter.SetFontScale(scale);
+
+    
+
+
+    string name = "out" + extension;
     int ex = static_cast<int>(inputVideo.get(CV_CAP_PROP_FOURCC));     // Get Codec Type- Int form
 
     // Transform from int to char via Bitwise operators
@@ -29,16 +66,22 @@ int main(int, char**)
     w = w + (converter.GetMaxSymbolWidth() - w % converter.GetMaxSymbolWidth());
 
     VideoWriter outputVideo;    // Open the output
-    outputVideo.open(name, ex = -1, inputVideo.get(CV_CAP_PROP_FPS), Size(w, h), true);
+    outputVideo.open(name, ex, inputVideo.get(CV_CAP_PROP_FPS), Size(w, h), true);
 
     if (!outputVideo.isOpened())
     {
-        cout << "Could not open the output video for write: " << endl;
-        return -1;
+        cout << "Unknown codec" << endl;
+        outputVideo.open(name, ex = -1, inputVideo.get(CV_CAP_PROP_FPS), Size(w, h), true);
+        if (!outputVideo.isOpened())
+        {
+            cout << "Could not open the output video for write: " << endl;
+            return -1;
+        }
+
     }
     
     cout << "Input frame resolution: Width=" << w << "  Height=" << h
-        << "number of frames: " << inputVideo.get(CV_CAP_PROP_FRAME_COUNT) << endl;
+        << " number of frames: " << inputVideo.get(CV_CAP_PROP_FRAME_COUNT) << endl;
     cout << "Input codec type: " << EXT << endl;
 
 
@@ -46,6 +89,7 @@ int main(int, char**)
     Mat asciiFrame;
     long long frames = 1;
     int oldPercent = 0;
+    
     cout << "Start rendering" << endl;
     for (;;)
     {
@@ -62,6 +106,8 @@ int main(int, char**)
         }
         frames++;
     }
+    cout << "All 100% rendered" << endl;
     cout << "End rendering" << endl;
+    cout << "File save as " << name << endl;
     return 0;
 }

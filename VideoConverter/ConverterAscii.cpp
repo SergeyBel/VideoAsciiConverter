@@ -135,3 +135,8 @@ int ConverterAscii::GetMaxSymbolWidth()
 {
 	return drawer.maxSymbolWidth;
 }
+
+void ConverterAscii::SetFontScale(double scale)
+{
+	drawer.SetFontScale(scale);
+}
