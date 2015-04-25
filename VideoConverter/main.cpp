@@ -6,6 +6,7 @@ using namespace std;
 
 void PrintHelp()
 {
+    cout << "Usage: VideoConverter <input_file_name> <font_scale = 0.2>" << endl;
 }
 
 int main(int argc, char**argv)
@@ -17,7 +18,7 @@ int main(int argc, char**argv)
         return 0;
     }
     string input = argv[1];
-    VideoCapture inputVideo(input); // open the default camera
+    VideoCapture inputVideo(input); // open the video
     if (!inputVideo.isOpened())// check if we succeeded
     {
         cout << "Error: Can not open input video" << endl;
@@ -27,17 +28,32 @@ int main(int argc, char**argv)
     string extension = input.substr(input.find_first_of("."));
 
     double scale;
+    char *ptr;
     if (argc == 3)
     {
         try
         {
-            scale = strtod(argv[2], NULL);
+            scale = strtod(argv[2], &ptr);
         }
         catch (...)
         {
             cout << "Error: scale is not correct" << endl;
             PrintHelp();
             return 1;
+        }
+        if (*ptr != 0 || scale < 0)
+        {
+            cout << "Error: scale is not correct" << endl;
+            PrintHelp();
+            return 1;
+        }
+
+        if (scale > 2)
+        {
+            cout << "Error: scale is too big. Scale must be less than 2" << endl;
+            PrintHelp();
+            return 1;
+
         }
     }
     else
@@ -99,6 +115,7 @@ int main(int argc, char**argv)
         asciiFrame = converter.ConvertImageToAsciiImage(frame);
         outputVideo << asciiFrame;
         double percent = frames / (double)inputVideo.get(CV_CAP_PROP_FRAME_COUNT)  * 100;
+
         if (percent - oldPercent > 1)
         {
             oldPercent = std::floor(percent);

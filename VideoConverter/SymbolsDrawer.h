@@ -9,7 +9,7 @@ using namespace cv;
 
 class SymbolsDrawer
 {
-	string ascii;  // string of symbols to dra
+	string ascii;  // string of symbols to draw
 	int fontFace;  // font
 	double fontScale;  // scale of font
 	int thickness;   // thick of font line

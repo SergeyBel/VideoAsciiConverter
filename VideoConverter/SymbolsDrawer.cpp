@@ -38,10 +38,8 @@ Mat SymbolsDrawer::GetSymbolImage(string str, Scalar color)
 	Mat m(maxSymbolHeight, maxSymbolWidth, type);
 	m = Mat::zeros(maxSymbolHeight, maxSymbolWidth, type);
 	Point org = Point(0, maxSymbolHeight - 1);
-	//cout << "FontScale = " << fontScale << endl;
 	putText(m, str, org, fontFace, fontScale, color);
 	return m;
-
 }
 
 void SymbolsDrawer::DrawAsciiLine(Mat image, int i, string line, vector<Scalar> lineColors)
