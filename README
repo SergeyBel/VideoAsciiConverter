@@ -1,8 +1,16 @@
-VideoAsciiConverter is a project to convert video to ascii video.
+VideoAsciiConverter is a project that convert video to ascii video format.
+Based on OpenCV (http://opencv.org/)
 
-Usage: VideoConverter -i <intput file name> -o <output file name> -s <font scale> -c (optional)
+Usage: VideoConverter <input_file_name> <font_scale = 0.2>
 
--i <input file name> - name of video file to convert
--o <output file name> - name of result video file
--s <font scale> - font scale(double), set scale of ascii symbols
--c - if set then result video will be colored
+input_file_name - Path to input video file
+font_scale - Scale of font. Recommended in [0.03, 0.5]. default value is 0.2
+
+Result will write to out file.
+
+Examples:
+VideoConverter video.avi 0.1
+VideoConverter film.avi
+
+
+
