@@ -1,5 +1,6 @@
 VideoAsciiConverter is a project that convert video to ascii video format.
 Based on OpenCV (http://opencv.org/)
+To build with VS don't forget set OPENCV_DIR enviroment
 
 Usage: VideoConverter <input_file_name> <font_scale = 0.2>
 

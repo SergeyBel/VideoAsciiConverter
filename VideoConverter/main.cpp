@@ -1,4 +1,4 @@
-#include "opencv2/opencv.hpp"
+#include "opencv2\opencv.hpp"
 #include <fstream>
 #include "ConverterAscii.h"
 using namespace cv;
