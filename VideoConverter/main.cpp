@@ -17,15 +17,9 @@ int main(int argc, char**argv)
         PrintHelp();
         return 0;
     }
-    string input = argv[1];
-    VideoCapture inputVideo(input); // open the video
-    if (!inputVideo.isOpened())// check if we succeeded
-    {
-        cout << "Error: Can not open input video" << endl;
-        return -1;
-    }
 
-    string extension = input.substr(input.find_first_of("."));
+
+    
 
     double scale;
     char *ptr;
@@ -65,6 +59,29 @@ int main(int argc, char**argv)
 
     ConverterAscii converter;
     converter.SetFontScale(scale);
+
+    string input = argv[1];
+    cout << input << endl;
+    string extension = input.substr(input.find_first_of("."));
+    VideoCapture inputVideo(input); // open the video
+    if (!inputVideo.isOpened() || extension == ".jpg")// check if we succeeded
+    {
+        Mat image;
+        image = imread(input, CV_LOAD_IMAGE_COLOR);
+        if (!image.data)
+        {
+            cout << "Error: Can not open input video or image" << endl;
+            return -1;
+        }
+
+        Mat ascii;
+        cout << "Rendering..." << endl;
+        ascii = converter.ConvertImageToAsciiImage(image);
+        string outImageName = "out" + extension;
+        imwrite(outImageName, ascii);
+        cout << "File save as " << outImageName << endl;
+        return 0;
+    }
 
     
 
